@@ -9,9 +9,9 @@ RSpec.describe Task, type: :model do
     end
 
     it 'is invalid without title' do
-      task = FactoryBot.build(:task, title: nil)
-      task.valid?
-      expect(task.errors[:title]).to include("can't be blank")
+      task_without_title = build(:task, title: "")
+      expect(task_without_title).to be_invalid
+      expect(task_without_title.errors[:title]).to eq ["can't be blank"]
     end
 
     it 'is invalid without status' do
