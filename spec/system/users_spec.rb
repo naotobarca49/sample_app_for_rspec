@@ -77,8 +77,8 @@ RSpec.describe "Users", type: :system, focus: true do
         it 'ユーザーの編集が失敗する' do
           visit edit_user_path(user)
           fill_in 'Email', with: nil
-          fill_in 'Password', with: 'update_password'
-          fill_in 'Password confirmation', with: 'update_password'
+          fill_in 'Password', with: 'password'
+          fill_in 'Password confirmation', with: 'password'
           click_button 'Update'
           expect(page).to have_content '1 error prohibited this user from being saved'
           expect(page).to have_content "Email can't be blank"
