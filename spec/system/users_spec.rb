@@ -88,8 +88,8 @@ RSpec.describe "Users", type: :system, focus: true do
 
       context '登録済のメールアドレスを使用' do
         it 'ユーザーの編集が失敗する' do
-          existed_user = create(:user)
           visit edit_user_path(user)
+          existed_user = create(:user)
           fill_in 'Email', with: existed_user.email
           fill_in 'Password', with: 'password'
           fill_in 'Password confirmation', with: 'password'
