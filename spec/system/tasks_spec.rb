@@ -90,6 +90,17 @@ RSpec.describe "Tasks", type: :system, focus: true do
           expect(current_path).to eq task_path(task)
         end
       end
+
+      context 'タイトルが未入力' do
+        it 'タスクの編集に失敗する' do
+          fill_in 'Title', with: nil
+          select :done, from: 'Status'
+          click_button 'Update Task'
+          expect(page).to have_content '1 error prohibited this task from being saved:'
+          expect(page).to have_content "Title can't be blank"
+          expect(current_path).to eq task_path(task)
+        end
+      end
     end
   end
 end
