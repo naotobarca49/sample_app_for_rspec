@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Users", type: :system do
+RSpec.describe "Users", type: :system, focus: true do
   let(:user) { create(:user) }
 
   describe 'ログイン前' do
@@ -27,6 +27,21 @@ RSpec.describe "Users", type: :system do
           expect(page).to have_content '1 error prohibited this user from being saved'
           expect(page).to have_content "Email can't be blank"
           expect(current_path).to eq users_path
+        end
+      end
+
+      context '登録済のメールアドレスを使用' do
+        it 'ユーザーの新規作成が失敗する' do
+          existed_user = create(:user)
+          visit new_user_path
+          fill_in 'Email', with: existed_user.email
+          fill_in 'Password', with: "password"
+          fill_in 'Password confirmation', with: "password"
+          click_button 'SignUp'
+          expect(page).to have_content '1 error prohibited this user from being saved'
+          expect(page).to have_content 'Email has already been taken'
+          expect(current_path).to eq users_path
+          expect(page).to have_field 'Email', with: existed_user.email
         end
       end
     end
