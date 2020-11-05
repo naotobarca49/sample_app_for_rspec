@@ -72,6 +72,24 @@ RSpec.describe "Tasks", type: :system, focus: true do
           expect(current_path). to eq tasks_path
         end
       end
-    end    
+    end
+
+    describe 'タスク編集' do
+      let!(:task) { create(:task, user: user) }
+      let(:other_task) { create(:task, user: user) }
+      before { visit edit_task_path(task) }
+
+      context 'フォームの入力値が正常' do
+        it 'タスクの編集が成功する' do
+          fill_in 'Title', with: 'updated_title'
+          select :done, from: 'Status'
+          click_button 'Update Task'
+          expect(page).to have_content 'Title: updated_title'
+          expect(page).to have_content 'Status: done'
+          expect(page).to have_content 'Task was successfully updated.'
+          expect(current_path).to eq task_path(task)
+        end
+      end
+    end
   end
 end
