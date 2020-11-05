@@ -56,4 +56,22 @@ RSpec.describe "Users", type: :system, focus: true do
       end
     end
   end
+
+  describe 'ログイン後' do
+    describe 'ユーザー編集' do
+      context 'フォームの入力値が正常' do
+        it 'ユーザーの編集が成功する' do
+          login_as(user)
+          visit edit_user_path(user)
+          expect(page).to have_field 'Email', with: user.email
+          fill_in 'Email', with: 'email_edit@example.com'
+          fill_in 'Password', with: 'password'
+          fill_in 'Password confirmation', with: 'password'
+          click_button 'Update'
+          expect(page).to have_content 'User was successfully updated.'
+          expect(current_path).to eq user_path(user)
+        end
+      end
+    end
+  end
 end
