@@ -72,6 +72,19 @@ RSpec.describe "Users", type: :system, focus: true do
           expect(current_path).to eq user_path(user)
         end
       end
+
+      context 'メールアドレスが未入力' do
+        it 'ユーザーの編集が失敗する' do
+          visit edit_user_path(user)
+          fill_in 'Email', with: nil
+          fill_in 'Password', with: 'update_password'
+          fill_in 'Password confirmation', with: 'update_password'
+          click_button 'Update'
+          expect(page).to have_content '1 error prohibited this user from being saved'
+          expect(page).to have_content "Email can't be blank"
+          expect(current_path).to eq user_path(user)
+        end
+      end
     end
   end
 end
