@@ -85,6 +85,20 @@ RSpec.describe "Users", type: :system, focus: true do
           expect(current_path).to eq user_path(user)
         end
       end
+
+      context '登録済のメールアドレスを使用' do
+        it 'ユーザーの編集が失敗する' do
+          existed_user = create(:user)
+          visit edit_user_path(user)
+          fill_in 'Email', with: existed_user.email
+          fill_in 'Password', with: 'password'
+          fill_in 'Password confirmation', with: 'password'
+          click_button 'Update'
+          expect(page).to have_content '1 error prohibited this user from being saved'
+          expect(page).to have_content 'Email has already been taken'
+          expect(current_path).to eq user_path(user)
+        end
+      end
     end
   end
 end
