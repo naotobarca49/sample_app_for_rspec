@@ -27,13 +27,22 @@ RSpec.describe "Tasks", type: :system, focus: true do
   describe 'ログイン後' do
     before { login_as(user) }
 
-    describe 'ページ遷移確認' do
-      context 'タスクの新規登録ページにアクセス' do
-        it '新規登録ページのアクセスが成功する' do
-          click_link 'New task'
-          expect(current_path).to eq new_task_path
+    describe 'タスクの新規作成' do
+      context 'フォームの入力値が正常' do
+        it 'タスクの新規作成が成功する' do
+          visit new_task_path
+          fill_in 'Title', with: 'test_title'
+          fill_in 'Content', with: 'test_content'
+          select 'doing', from: 'Status'
+          fill_in 'Deadline', with: DateTime.new(2020, 6, 1, 10, 30)
+          click_button 'Create Task'
+          expect(page).to have_content 'Title: test_title'
+          expect(page).to have_content 'Content: test_content'
+          expect(page).to have_content 'Status: doing'
+          expect(page).to have_content 'Deadline: 2020/6/1 10:30'
+          expect(current_path).to eq '/tasks/1'
         end
       end
-    end
+    end    
   end
 end
